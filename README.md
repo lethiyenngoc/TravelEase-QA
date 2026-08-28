@@ -67,6 +67,11 @@ These tests are intentionally expected to fail until the corresponding applicati
 ```text
 TravelEase-QA
 │
+├── docs
+│   ├── allure-regression-report.png
+│   ├── bug-001-search-suggestion.png
+│   └── bug-002-rbac-access.png
+│
 ├── src
 │   ├── main
 │   │   └── java
@@ -142,6 +147,31 @@ http://localhost:3000
 ```
 
 The TravelEase application must be running before executing the Selenium test suite.
+
+## Environment Variables
+
+Test credentials are managed through environment variables to avoid hard-coding sensitive data in the source code.
+
+Configure the following environment variables before running the automation suite:
+
+| Variable | Description |
+|---|---|
+| `TRAVELEASE_ADMIN_EMAIL` | Active Admin account email |
+| `TRAVELEASE_ADMIN_PASSWORD` | Active Admin account password |
+| `TRAVELEASE_INACTIVE_EMAIL` | Inactive Admin account email |
+| `TRAVELEASE_INACTIVE_PASSWORD` | Inactive Admin account password |
+| `TRAVELEASE_RESTRICTED_EMAIL` | Restricted-role Admin account email |
+| `TRAVELEASE_RESTRICTED_PASSWORD` | Restricted-role Admin account password |
+
+### IntelliJ IDEA Setup
+
+1. Open **Run → Edit Configurations**.
+2. Select the **TravelEase Regression** TestNG configuration.
+3. Open **Environment variables**.
+4. Add the required variables and their local test-account values.
+5. Run the regression suite.
+
+> Test credentials are intentionally excluded from the repository and should never be committed to source control.
 
 ## Test Evidence
 
