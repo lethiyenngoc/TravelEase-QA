@@ -1,0 +1,3832 @@
+{
+  "info": {
+    "_postman_id": "449ecfdc-89a8-40fd-b532-97839b35fad2",
+    "name": "TravelEase API Testing",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "36332621"
+  },
+  "item": [
+    {
+      "name": "01 - Search",
+      "item": [
+        {
+          "name": "Search Suggestions - Valid Keyword",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response code is success\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.code).to.eql(\"success\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Data is an array\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.data).to.be.an(\"array\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Search returns at least one tour\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.data.length).to.be.above(0);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Returned tours contain keyword Sapa\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "\r",
+                  "    jsonData.data.forEach(tour => {\r",
+                  "        pm.expect(tour.name.toLowerCase()).to.include(\"sapa\");\r",
+                  "    });\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/search/suggest?keyword=Sapa",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "search",
+                "suggest"
+              ],
+              "query": [
+                {
+                  "key": "keyword",
+                  "value": "Sapa",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Search Suggestions - No Matching Keyword",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response code is success\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.code).to.eql(\"success\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Data is an array\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.data).to.be.an(\"array\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"No matching tours are returned\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.data).to.have.lengthOf(0);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/search/suggest?keyword=xyznotfound123",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "search",
+                "suggest"
+              ],
+              "query": [
+                {
+                  "key": "keyword",
+                  "value": "xyznotfound123"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Search Suggestions - Empty Keyword",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response code is success\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.code).to.eql(\"success\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Data is an array\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.data).to.be.an(\"array\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Empty keyword returns no suggestions\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.data).to.have.lengthOf(0);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/search/suggest?keyword=",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "search",
+                "suggest"
+              ],
+              "query": [
+                {
+                  "key": "keyword",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Search Suggestions - Case Insensitive",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response code is success\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.code).to.eql(\"success\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Data is an array\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.data).to.be.an(\"array\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Search returns at least one tour\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.data.length).to.be.above(0);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Search is case-insensitive\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "\r",
+                  "    jsonData.data.forEach(tour => {\r",
+                  "        pm.expect(tour.name.toLowerCase()).to.include(\"sapa\");\r",
+                  "    });\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/search/suggest?keyword=SAPA",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "search",
+                "suggest"
+              ],
+              "query": [
+                {
+                  "key": "keyword",
+                  "value": "SAPA"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Search Suggestions - Trimmed Keyword",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response code is success\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.code).to.eql(\"success\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Data is an array\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.data).to.be.an(\"array\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Search returns at least one tour\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.data.length).to.be.above(0);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Leading and trailing spaces are trimmed\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "\r",
+                  "    jsonData.data.forEach(tour => {\r",
+                  "        pm.expect(tour.name.toLowerCase()).to.include(\"sapa\");\r",
+                  "    });\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/search/suggest?keyword=   Sapa",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "search",
+                "suggest"
+              ],
+              "query": [
+                {
+                  "key": "keyword",
+                  "value": "   Sapa"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "02 - Authentication",
+      "item": [
+        {
+          "name": "Login - Valid Credentials",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response code is success\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.code).to.eql(\"success\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Login success message is correct\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.message).to.eql(\"Đăng nhập tài khoản thành công!\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Authentication cookie is created\", function () {\r",
+                  "    const tokenCookie = pm.cookies.get(\"token\");\r",
+                  "    pm.expect(tokenCookie).to.not.be.undefined;\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"email\": \"{{admin_email}}\",\r\n  \"password\": \"{{admin_password}}\",\r\n  \"rememberPassword\": false\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/account/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "account",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login - Assigned Role Admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response code is success\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.code).to.eql(\"success\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Login success message is returned\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.message).to.eql(\"Đăng nhập tài khoản thành công!\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"email\": \"{{role_admin_email}}\", // Đổi lại email ...004\r\n  \"password\": \"{{role_admin_password}}\",\r\n  \"rememberPassword\": false\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/account/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "account",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login - Incorrect Password",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response code is error\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.code).to.eql(\"error\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Incorrect password message is returned\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.message).to.eql(\"Mật khẩu không đúng!\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"email\": \"{{admin_email}}\",\r\n  \"password\": \"Wrong@123\",\r\n  \"rememberPassword\": false\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/account/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "account",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login - Non-existing Email",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response code is error\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.code).to.eql(\"error\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Non-existing email message is returned\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.message).to.eql(\"Email không tồn tại trong hệ thống!\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"email\": \"notexist999@gmail.com\",\r\n  \"password\": \"Wrong@123\",\r\n  \"rememberPassword\": false\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/account/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "account",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login - Inactive Account",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response code is error\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.code).to.eql(\"error\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Inactive account message is returned\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.message).to.eql(\"Tài khoản chưa được kích hoạt!\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"email\": \"{{inactive_admin_email}}\",\r\n  \"password\": \"{{inactive_admin_password}}\",\r\n  \"rememberPassword\": false\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/account/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "account",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login - Empty Email",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response code is error\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.code).to.eql(\"error\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Empty email validation message is returned\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.message).to.eql(\"Vui lòng nhập email!\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"email\": \"\",\r\n  \"password\": \"Abc@1234\",\r\n  \"rememberPassword\": false\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/account/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "account",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login - Invalid Email Format",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response code is error\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.code).to.eql(\"error\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Invalid email format message is returned\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.message).to.eql(\"Email không đúng định dạng!\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"email\": \"levanagmail.com\",\r\n  \"password\": \"Abc@1234\",\r\n  \"rememberPassword\": false\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/account/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "account",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login - Empty Password",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response code is error\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.code).to.eql(\"error\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Empty password validation message is returned\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.message).to.eql(\"Vui lòng nhập mật khẩu!\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"email\": \"{{admin_email}}\",\r\n  \"password\": \"\",\r\n  \"rememberPassword\": false\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/account/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "account",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login - Password Less Than 8 Characters",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response code is error\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.code).to.eql(\"error\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Password minimum length validation message is returned\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.message).to.eql(\"Mật khẩu phải chứa ít nhất 8 ký tự!\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"email\": \"{{admin_email}}\",\r\n  \"password\": \"123\",\r\n  \"rememberPassword\": false\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/account/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "account",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login - Password Missing Uppercase",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response code is error\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.code).to.eql(\"error\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Missing uppercase validation message is returned\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.message).to.eql(\r",
+                  "        \"Mật khẩu phải chứa ít nhất một chữ cái in hoa!\"\r",
+                  "    );\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"email\": \"{{admin_email}}\",\r\n  \"password\": \"abc@1234\",\r\n  \"rememberPassword\": false\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/account/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "account",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Register - Valid Data",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response code is success\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.code).to.eql(\"success\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Registration success message is returned\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.message).to.eql(\"Đăng ký tài khoản thành công!\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"fullName\": \"Nguyen Van API\",\r\n  \"email\": \"apitest011@gmail.com\",\r\n  \"password\": \"ApiTest@123\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/account/register",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "account",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Register - Duplicate Email",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response code is error\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.code).to.eql(\"error\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Duplicate email message is returned\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.message).to.eql(\"Email đã tồn tại trong hệ thống!\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"fullName\": \"Nguyen Van API\",\r\n  \"email\": \"apitest010@gmail.com\",\r\n  \"password\": \"ApiTest@123\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/account/register",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "account",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Register - Empty Full Name",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response code is error\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.code).to.eql(\"error\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Empty full name validation message is returned\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.message).to.eql(\"Vui lòng nhập họ tên!\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"fullName\": \"\",\r\n  \"email\": \"apitest012@gmail.com\",\r\n  \"password\": \"ApiTest@123\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/account/register",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "account",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Register - Invalid Email Format",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response code is error\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.code).to.eql(\"error\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Invalid email format message is returned\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.message).to.eql(\"Email không đúng định dạng!\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"fullName\": \"Nguyen Van API\",\r\n  \"email\": \"apitest013gmail.com\",\r\n  \"password\": \"ApiTest@123\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/account/register",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "account",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Register - Password Less Than 8 Characters",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response code is error\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.code).to.eql(\"error\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Password minimum length validation message is returned\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.message).to.eql(\"Mật khẩu phải chứa ít nhất 8 ký tự!\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"fullName\": \"Nguyen Van API\",\r\n  \"email\": \"apitest014@gmail.com\",\r\n  \"password\": \"Abc@12\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/account/register",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "account",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "03 - Cart & Booking",
+      "item": [
+        {
+          "name": "Cart Detail - Valid Tour",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response code is success\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.code).to.eql(\"success\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Cart contains one valid tour\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.cart).to.be.an(\"array\");\r",
+                  "    pm.expect(jsonData.cart.length).to.eql(1);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Tour information is populated\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    const item = jsonData.cart[0];\r",
+                  "\r",
+                  "    pm.expect(item.tourId).to.eql(\"693443bc5385f6c9eb24ecaa\");\r",
+                  "    pm.expect(item.name).to.be.a(\"string\");\r",
+                  "    pm.expect(item.slug).to.be.a(\"string\");\r",
+                  "    pm.expect(item.priceNewAdult).to.be.a(\"number\");\r",
+                  "    pm.expect(item.locationFromName).to.eql(\"Quảng Ngãi\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "[\r\n  {\r\n    \"tourId\": \"693443bc5385f6c9eb24ecaa\",\r\n    \"locationFrom\": \"680ae9e82a0e7bdf09dfb834\",\r\n    \"quantityAdult\": 1,\r\n    \"quantityChildren\": 0,\r\n    \"quantityBaby\": 0\r\n  }\r\n]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/cart/detail",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "cart",
+                "detail"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Cart Detail - Inactive or Deleted Tour",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response code is success\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.code).to.eql(\"success\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Invalid tour is removed from cart\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "\r",
+                  "    pm.expect(jsonData.cart).to.be.an(\"array\");\r",
+                  "    pm.expect(jsonData.cart.length).to.eql(0);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "[\r\n  {\r\n    \"tourId\": \"69314c354207b99bab7ba0e0\",\r\n    \"locationFrom\": \"680ae9e82a0e7bdf09dfb834\",\r\n    \"quantityAdult\": 1,\r\n    \"quantityChildren\": 0,\r\n    \"quantityBaby\": 0\r\n  }\r\n]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/cart/detail",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "cart",
+                "detail"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Cart Detail - Multiple Valid Tours",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response code is success\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.code).to.eql(\"success\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Cart contains two valid tours\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "\r",
+                  "    pm.expect(jsonData.cart).to.be.an(\"array\");\r",
+                  "    pm.expect(jsonData.cart.length).to.eql(2);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Both tour details are populated correctly\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "\r",
+                  "    const tourIds = jsonData.cart.map(item => item.tourId);\r",
+                  "\r",
+                  "    pm.expect(tourIds).to.include(\"693443bc5385f6c9eb24ecaa\");\r",
+                  "    pm.expect(tourIds).to.include(\"693159134207b99bab7ba199\");\r",
+                  "\r",
+                  "    jsonData.cart.forEach(item => {\r",
+                  "        pm.expect(item.name).to.be.a(\"string\");\r",
+                  "        pm.expect(item.slug).to.be.a(\"string\");\r",
+                  "        pm.expect(item.priceNewAdult).to.be.a(\"number\");\r",
+                  "        pm.expect(item.locationFromName).to.eql(\"Quảng Ngãi\");\r",
+                  "    });\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Cart quantities are preserved\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "\r",
+                  "    const secondTour = jsonData.cart.find(\r",
+                  "        item => item.tourId === \"693159134207b99bab7ba199\"\r",
+                  "    );\r",
+                  "\r",
+                  "    pm.expect(secondTour.quantityAdult).to.eql(2);\r",
+                  "    pm.expect(secondTour.quantityChildren).to.eql(1);\r",
+                  "    pm.expect(secondTour.quantityBaby).to.eql(0);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "[\r\n  {\r\n    \"tourId\": \"693443bc5385f6c9eb24ecaa\",\r\n    \"locationFrom\": \"680ae9e82a0e7bdf09dfb834\",\r\n    \"quantityAdult\": 1,\r\n    \"quantityChildren\": 0,\r\n    \"quantityBaby\": 0\r\n  },\r\n  {\r\n    \"tourId\": \"693159134207b99bab7ba199\",\r\n    \"locationFrom\": \"680ae9e82a0e7bdf09dfb834\",\r\n    \"quantityAdult\": 2,\r\n    \"quantityChildren\": 1,\r\n    \"quantityBaby\": 0\r\n  }\r\n]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/cart/detail",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "cart",
+                "detail"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Cart Detail - Empty Cart",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response code is success\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.code).to.eql(\"success\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Empty cart is returned\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "\r",
+                  "    pm.expect(jsonData.cart).to.be.an(\"array\");\r",
+                  "    pm.expect(jsonData.cart.length).to.eql(0);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "[]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/cart/detail",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "cart",
+                "detail"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Order - Valid Data",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response code is success\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.code).to.eql(\"success\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Order success message is returned\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.message).to.eql(\"Đặt hàng thành công!\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Order ID is returned\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.orderId).to.exist;\r",
+                  "    pm.expect(jsonData.orderId).to.be.a(\"string\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "// {{base_url}}/cart/detail\r\n// {}\r\n\r\n{\r\n  \"fullName\": \"API Test User\",\r\n  \"phone\": \"0901234567\",\r\n  \"note\": \"API testing order\",\r\n  \"paymentMethod\": \"money\",\r\n  \"items\": [\r\n    {\r\n      \"tourId\": \"693443bc5385f6c9eb24ecaa\",\r\n      \"locationFrom\": \"680ae9e82a0e7bdf09dfb834\",\r\n      \"quantityAdult\": 1,\r\n      \"quantityChildren\": 0,\r\n      \"quantityBaby\": 0\r\n    }\r\n  ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/order/create",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "order",
+                "create"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Order - Empty Full Name",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response code should be error\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.code).to.eql(\"error\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Order should not be created with empty full name\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.orderId).to.be.undefined;\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "// API-BUG-005\r\n\r\n{\r\n  \"fullName\": \"\",\r\n  \"phone\": \"0901234567\",\r\n  \"note\": \"API testing order\",\r\n  \"paymentMethod\": \"money\",\r\n  \"items\": [\r\n    {\r\n      \"tourId\": \"693443bc5385f6c9eb24ecaa\",\r\n      \"locationFrom\": \"680ae9e82a0e7bdf09dfb834\",\r\n      \"quantityAdult\": 1,\r\n      \"quantityChildren\": 0,\r\n      \"quantityBaby\": 0\r\n    }\r\n  ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/order/create",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "order",
+                "create"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Order - Empty Phone",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response code should be error\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.code).to.eql(\"error\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Order should not be created with empty phone\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.orderId).to.be.undefined;\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "// API-BUG-005\r\n\r\n{\r\n  \"fullName\": \"API Test User\",\r\n  \"phone\": \"\",\r\n  \"note\": \"API testing order\",\r\n  \"paymentMethod\": \"money\",\r\n  \"items\": [\r\n    {\r\n      \"tourId\": \"693443bc5385f6c9eb24ecaa\",\r\n      \"locationFrom\": \"680ae9e82a0e7bdf09dfb834\",\r\n      \"quantityAdult\": 1,\r\n      \"quantityChildren\": 0,\r\n      \"quantityBaby\": 0\r\n    }\r\n  ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/order/create",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "order",
+                "create"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Order - Invalid Phone Format",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response code should be error\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.code).to.eql(\"error\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Order should not be created with invalid phone format\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.orderId).to.be.undefined;\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "// API-BUG-005\r\n\r\n{\r\n  \"fullName\": \"API Test User\",\r\n  \"phone\": \"abcxyz\",\r\n  \"note\": \"API testing order\",\r\n  \"paymentMethod\": \"money\",\r\n  \"items\": [\r\n    {\r\n      \"tourId\": \"693443bc5385f6c9eb24ecaa\",\r\n      \"locationFrom\": \"680ae9e82a0e7bdf09dfb834\",\r\n      \"quantityAdult\": 1,\r\n      \"quantityChildren\": 0,\r\n      \"quantityBaby\": 0\r\n    }\r\n  ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/order/create",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "order",
+                "create"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Order - Empty Items",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response code should be error\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.code).to.eql(\"error\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Order should not be created without tour items\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.orderId).to.be.undefined;\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "// API-BUG-006\r\n\r\n{\r\n  \"fullName\": \"API Test User\",\r\n  \"phone\": \"0901234567\",\r\n  \"note\": \"API testing order\",\r\n  \"paymentMethod\": \"money\",\r\n  \"items\": []\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/order/create",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "order",
+                "create"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Cart Detail - Invalid Body Format",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "// API-BUG-004\r\n{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/cart/detail",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "cart",
+                "detail"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "04 - Admin Tour Management",
+      "item": [
+        {
+          "name": "Create Tour - Valid Data",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// 02 - Authentication → Login - Valid Credentials. Đăng nhập để Postman nhận cookie/token mới.\r",
+                  "// Sau đó vào: 04 - Admin Tour Management → Create Tour - Valid Data để Send\r",
+                  "\r",
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response code is success\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.code).to.eql(\"success\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "packages": {},
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "name",
+                  "value": "API Test Tour 001",
+                  "type": "text",
+                  "uuid": "7b21f5c4-0b99-4486-9f07-e06bfc1b2b38"
+                },
+                {
+                  "key": "category",
+                  "value": "",
+                  "type": "text",
+                  "uuid": "59534ba0-e9d4-49cc-bd64-886de55cf795"
+                },
+                {
+                  "key": "position",
+                  "value": "",
+                  "type": "text",
+                  "uuid": "541ef19e-4188-4bf4-93ef-6fce3a855096"
+                },
+                {
+                  "key": "status",
+                  "value": "active",
+                  "type": "text",
+                  "uuid": "29ef6bd0-951f-4171-a822-f15d9f0c97c2"
+                },
+                {
+                  "key": "priceAdult",
+                  "value": "1000000",
+                  "type": "text",
+                  "uuid": "9038d973-3209-4aec-9917-de989531ec25"
+                },
+                {
+                  "key": "priceChildren",
+                  "value": "500000",
+                  "type": "text",
+                  "uuid": "136e544b-737f-4c79-b9a2-23826aee1621"
+                },
+                {
+                  "key": "priceBaby",
+                  "value": "0",
+                  "type": "text",
+                  "uuid": "c3258cff-2814-41d0-b07f-587a9535161d"
+                },
+                {
+                  "key": "priceNewAdult",
+                  "value": "900000",
+                  "type": "text",
+                  "uuid": "6485c132-d5d6-49db-8928-be6bce5af280"
+                },
+                {
+                  "key": "priceNewChildren",
+                  "value": "450000",
+                  "type": "text",
+                  "uuid": "f1cfb4e0-1033-473d-a189-2206afcb8910"
+                },
+                {
+                  "key": "priceNewBaby",
+                  "value": "0",
+                  "type": "text",
+                  "uuid": "25489a38-d1b0-44e6-805d-ee7132539a83"
+                },
+                {
+                  "key": "stockAdult",
+                  "value": "20",
+                  "type": "text",
+                  "uuid": "080ee276-a1a0-49d5-b17a-1d678a117c71"
+                },
+                {
+                  "key": "stockChildren",
+                  "value": "10",
+                  "type": "text",
+                  "uuid": "ce285bba-6622-4c67-8981-5f6b3057d33b"
+                },
+                {
+                  "key": "stockBaby",
+                  "value": "5",
+                  "type": "text",
+                  "uuid": "c85a8aa0-eaa8-4847-a99b-b12cc27f96bd"
+                },
+                {
+                  "key": "locations",
+                  "value": "[]",
+                  "type": "text",
+                  "uuid": "4441e721-d313-46d1-8966-6a4e11e96589"
+                },
+                {
+                  "key": "time",
+                  "value": "2N1Đ",
+                  "type": "text",
+                  "uuid": "ae325e2b-9908-4e22-8a63-473dbc12a916"
+                },
+                {
+                  "key": "vehicle",
+                  "value": "Xe khách",
+                  "type": "text",
+                  "uuid": "bf638c3d-8eea-442e-9a0a-69a70af25415"
+                },
+                {
+                  "key": "departureDate",
+                  "value": "2026-09-15",
+                  "type": "text",
+                  "uuid": "0de06818-83a0-4967-8b04-b5fbe2709885"
+                },
+                {
+                  "key": "information",
+                  "value": "Tour created for API testing",
+                  "type": "text",
+                  "uuid": "2de54f36-2f66-4857-b1c5-7ef55d961036"
+                },
+                {
+                  "key": "schedules",
+                  "value": "[]",
+                  "type": "text",
+                  "uuid": "367cd771-0da9-4fd8-bc51-01807860125b"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/tour/create",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "tour",
+                "create"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Tour - Without Permission",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response code is error\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.code).to.eql(\"error\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Permission denied message is returned\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.message).to.eql(\"Không có quyền sử dụng tính năng này!\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "name",
+                  "value": "API Test Tour 001",
+                  "type": "text",
+                  "uuid": "7b21f5c4-0b99-4486-9f07-e06bfc1b2b38"
+                },
+                {
+                  "key": "category",
+                  "value": "",
+                  "type": "text",
+                  "uuid": "59534ba0-e9d4-49cc-bd64-886de55cf795"
+                },
+                {
+                  "key": "position",
+                  "value": "",
+                  "type": "text",
+                  "uuid": "541ef19e-4188-4bf4-93ef-6fce3a855096"
+                },
+                {
+                  "key": "status",
+                  "value": "active",
+                  "type": "text",
+                  "uuid": "29ef6bd0-951f-4171-a822-f15d9f0c97c2"
+                },
+                {
+                  "key": "priceAdult",
+                  "value": "1000000",
+                  "type": "text",
+                  "uuid": "9038d973-3209-4aec-9917-de989531ec25"
+                },
+                {
+                  "key": "priceChildren",
+                  "value": "500000",
+                  "type": "text",
+                  "uuid": "136e544b-737f-4c79-b9a2-23826aee1621"
+                },
+                {
+                  "key": "priceBaby",
+                  "value": "0",
+                  "type": "text",
+                  "uuid": "c3258cff-2814-41d0-b07f-587a9535161d"
+                },
+                {
+                  "key": "priceNewAdult",
+                  "value": "900000",
+                  "type": "text",
+                  "uuid": "6485c132-d5d6-49db-8928-be6bce5af280"
+                },
+                {
+                  "key": "priceNewChildren",
+                  "value": "450000",
+                  "type": "text",
+                  "uuid": "f1cfb4e0-1033-473d-a189-2206afcb8910"
+                },
+                {
+                  "key": "priceNewBaby",
+                  "value": "0",
+                  "type": "text",
+                  "uuid": "25489a38-d1b0-44e6-805d-ee7132539a83"
+                },
+                {
+                  "key": "stockAdult",
+                  "value": "20",
+                  "type": "text",
+                  "uuid": "080ee276-a1a0-49d5-b17a-1d678a117c71"
+                },
+                {
+                  "key": "stockChildren",
+                  "value": "10",
+                  "type": "text",
+                  "uuid": "ce285bba-6622-4c67-8981-5f6b3057d33b"
+                },
+                {
+                  "key": "stockBaby",
+                  "value": "5",
+                  "type": "text",
+                  "uuid": "c85a8aa0-eaa8-4847-a99b-b12cc27f96bd"
+                },
+                {
+                  "key": "locations",
+                  "value": "[]",
+                  "type": "text",
+                  "uuid": "4441e721-d313-46d1-8966-6a4e11e96589"
+                },
+                {
+                  "key": "time",
+                  "value": "2N1Đ",
+                  "type": "text",
+                  "uuid": "ae325e2b-9908-4e22-8a63-473dbc12a916"
+                },
+                {
+                  "key": "vehicle",
+                  "value": "Xe khách",
+                  "type": "text",
+                  "uuid": "bf638c3d-8eea-442e-9a0a-69a70af25415"
+                },
+                {
+                  "key": "departureDate",
+                  "value": "2026-09-15",
+                  "type": "text",
+                  "uuid": "0de06818-83a0-4967-8b04-b5fbe2709885"
+                },
+                {
+                  "key": "information",
+                  "value": "Tour created for API testing",
+                  "type": "text",
+                  "uuid": "2de54f36-2f66-4857-b1c5-7ef55d961036"
+                },
+                {
+                  "key": "schedules",
+                  "value": "[]",
+                  "type": "text",
+                  "uuid": "367cd771-0da9-4fd8-bc51-01807860125b"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/tour/create",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "tour",
+                "create"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Tour - Empty Name",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response code is error\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.code).to.eql(\"error\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Required tour name validation message is returned\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.message).to.eql(\"Vui lòng nhập tên tour!\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "name",
+                  "value": "",
+                  "type": "text",
+                  "uuid": "7b21f5c4-0b99-4486-9f07-e06bfc1b2b38"
+                },
+                {
+                  "key": "category",
+                  "value": "",
+                  "type": "text",
+                  "uuid": "59534ba0-e9d4-49cc-bd64-886de55cf795"
+                },
+                {
+                  "key": "position",
+                  "value": "",
+                  "type": "text",
+                  "uuid": "541ef19e-4188-4bf4-93ef-6fce3a855096"
+                },
+                {
+                  "key": "status",
+                  "value": "active",
+                  "type": "text",
+                  "uuid": "29ef6bd0-951f-4171-a822-f15d9f0c97c2"
+                },
+                {
+                  "key": "priceAdult",
+                  "value": "1000000",
+                  "type": "text",
+                  "uuid": "9038d973-3209-4aec-9917-de989531ec25"
+                },
+                {
+                  "key": "priceChildren",
+                  "value": "500000",
+                  "type": "text",
+                  "uuid": "136e544b-737f-4c79-b9a2-23826aee1621"
+                },
+                {
+                  "key": "priceBaby",
+                  "value": "0",
+                  "type": "text",
+                  "uuid": "c3258cff-2814-41d0-b07f-587a9535161d"
+                },
+                {
+                  "key": "priceNewAdult",
+                  "value": "900000",
+                  "type": "text",
+                  "uuid": "6485c132-d5d6-49db-8928-be6bce5af280"
+                },
+                {
+                  "key": "priceNewChildren",
+                  "value": "450000",
+                  "type": "text",
+                  "uuid": "f1cfb4e0-1033-473d-a189-2206afcb8910"
+                },
+                {
+                  "key": "priceNewBaby",
+                  "value": "0",
+                  "type": "text",
+                  "uuid": "25489a38-d1b0-44e6-805d-ee7132539a83"
+                },
+                {
+                  "key": "stockAdult",
+                  "value": "20",
+                  "type": "text",
+                  "uuid": "080ee276-a1a0-49d5-b17a-1d678a117c71"
+                },
+                {
+                  "key": "stockChildren",
+                  "value": "10",
+                  "type": "text",
+                  "uuid": "ce285bba-6622-4c67-8981-5f6b3057d33b"
+                },
+                {
+                  "key": "stockBaby",
+                  "value": "5",
+                  "type": "text",
+                  "uuid": "c85a8aa0-eaa8-4847-a99b-b12cc27f96bd"
+                },
+                {
+                  "key": "locations",
+                  "value": "[]",
+                  "type": "text",
+                  "uuid": "4441e721-d313-46d1-8966-6a4e11e96589"
+                },
+                {
+                  "key": "time",
+                  "value": "2N1Đ",
+                  "type": "text",
+                  "uuid": "ae325e2b-9908-4e22-8a63-473dbc12a916"
+                },
+                {
+                  "key": "vehicle",
+                  "value": "Xe khách",
+                  "type": "text",
+                  "uuid": "bf638c3d-8eea-442e-9a0a-69a70af25415"
+                },
+                {
+                  "key": "departureDate",
+                  "value": "2026-09-15",
+                  "type": "text",
+                  "uuid": "0de06818-83a0-4967-8b04-b5fbe2709885"
+                },
+                {
+                  "key": "information",
+                  "value": "Tour created for API testing",
+                  "type": "text",
+                  "uuid": "2de54f36-2f66-4857-b1c5-7ef55d961036"
+                },
+                {
+                  "key": "schedules",
+                  "value": "[]",
+                  "type": "text",
+                  "uuid": "367cd771-0da9-4fd8-bc51-01807860125b"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/tour/create",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "tour",
+                "create"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Edit Tour - Valid Data",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response code is success\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.code).to.eql(\"success\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "name",
+                  "value": "API Test Tour 001 - Updated",
+                  "type": "text",
+                  "uuid": "7b21f5c4-0b99-4486-9f07-e06bfc1b2b38"
+                },
+                {
+                  "key": "category",
+                  "value": "",
+                  "type": "text",
+                  "uuid": "59534ba0-e9d4-49cc-bd64-886de55cf795"
+                },
+                {
+                  "key": "position",
+                  "value": "",
+                  "type": "text",
+                  "uuid": "541ef19e-4188-4bf4-93ef-6fce3a855096"
+                },
+                {
+                  "key": "status",
+                  "value": "active",
+                  "type": "text",
+                  "uuid": "29ef6bd0-951f-4171-a822-f15d9f0c97c2"
+                },
+                {
+                  "key": "priceAdult",
+                  "value": "1200000",
+                  "type": "text",
+                  "uuid": "9038d973-3209-4aec-9917-de989531ec25"
+                },
+                {
+                  "key": "priceChildren",
+                  "value": "600000",
+                  "type": "text",
+                  "uuid": "136e544b-737f-4c79-b9a2-23826aee1621"
+                },
+                {
+                  "key": "priceBaby",
+                  "value": "0",
+                  "type": "text",
+                  "uuid": "c3258cff-2814-41d0-b07f-587a9535161d"
+                },
+                {
+                  "key": "priceNewAdult",
+                  "value": "1000000",
+                  "type": "text",
+                  "uuid": "6485c132-d5d6-49db-8928-be6bce5af280"
+                },
+                {
+                  "key": "priceNewChildren",
+                  "value": "500000",
+                  "type": "text",
+                  "uuid": "f1cfb4e0-1033-473d-a189-2206afcb8910"
+                },
+                {
+                  "key": "priceNewBaby",
+                  "value": "0",
+                  "type": "text",
+                  "uuid": "25489a38-d1b0-44e6-805d-ee7132539a83"
+                },
+                {
+                  "key": "stockAdult",
+                  "value": "25",
+                  "type": "text",
+                  "uuid": "080ee276-a1a0-49d5-b17a-1d678a117c71"
+                },
+                {
+                  "key": "stockChildren",
+                  "value": "12",
+                  "type": "text",
+                  "uuid": "ce285bba-6622-4c67-8981-5f6b3057d33b"
+                },
+                {
+                  "key": "stockBaby",
+                  "value": "5",
+                  "type": "text",
+                  "uuid": "c85a8aa0-eaa8-4847-a99b-b12cc27f96bd"
+                },
+                {
+                  "key": "locations",
+                  "value": "[]",
+                  "type": "text",
+                  "uuid": "4441e721-d313-46d1-8966-6a4e11e96589"
+                },
+                {
+                  "key": "time",
+                  "value": "3N2Đ",
+                  "type": "text",
+                  "uuid": "ae325e2b-9908-4e22-8a63-473dbc12a916"
+                },
+                {
+                  "key": "vehicle",
+                  "value": "Xe khách",
+                  "type": "text",
+                  "uuid": "bf638c3d-8eea-442e-9a0a-69a70af25415"
+                },
+                {
+                  "key": "departureDate",
+                  "value": "2026-09-28",
+                  "type": "text",
+                  "uuid": "0de06818-83a0-4967-8b04-b5fbe2709885"
+                },
+                {
+                  "key": "information",
+                  "value": "Tour updated via API testing",
+                  "type": "text",
+                  "uuid": "2de54f36-2f66-4857-b1c5-7ef55d961036"
+                },
+                {
+                  "key": "schedules",
+                  "value": "[]",
+                  "type": "text",
+                  "uuid": "367cd771-0da9-4fd8-bc51-01807860125b"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/tour/edit/6a8bc6b7a690eeacfed0c880",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "tour",
+                "edit",
+                "6a8bc6b7a690eeacfed0c880"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Edit Tour - Invalid ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response code is error\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.code).to.eql(\"error\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Invalid ID message is returned\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.message).to.eql(\"Id không hợp lệ!\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "name",
+                  "value": "API Test Tour 001 - Updated",
+                  "type": "text",
+                  "uuid": "7b21f5c4-0b99-4486-9f07-e06bfc1b2b38"
+                },
+                {
+                  "key": "category",
+                  "value": "",
+                  "type": "text",
+                  "uuid": "59534ba0-e9d4-49cc-bd64-886de55cf795"
+                },
+                {
+                  "key": "position",
+                  "value": "",
+                  "type": "text",
+                  "uuid": "541ef19e-4188-4bf4-93ef-6fce3a855096"
+                },
+                {
+                  "key": "status",
+                  "value": "active",
+                  "type": "text",
+                  "uuid": "29ef6bd0-951f-4171-a822-f15d9f0c97c2"
+                },
+                {
+                  "key": "priceAdult",
+                  "value": "1200000",
+                  "type": "text",
+                  "uuid": "9038d973-3209-4aec-9917-de989531ec25"
+                },
+                {
+                  "key": "priceChildren",
+                  "value": "600000",
+                  "type": "text",
+                  "uuid": "136e544b-737f-4c79-b9a2-23826aee1621"
+                },
+                {
+                  "key": "priceBaby",
+                  "value": "0",
+                  "type": "text",
+                  "uuid": "c3258cff-2814-41d0-b07f-587a9535161d"
+                },
+                {
+                  "key": "priceNewAdult",
+                  "value": "1000000",
+                  "type": "text",
+                  "uuid": "6485c132-d5d6-49db-8928-be6bce5af280"
+                },
+                {
+                  "key": "priceNewChildren",
+                  "value": "500000",
+                  "type": "text",
+                  "uuid": "f1cfb4e0-1033-473d-a189-2206afcb8910"
+                },
+                {
+                  "key": "priceNewBaby",
+                  "value": "0",
+                  "type": "text",
+                  "uuid": "25489a38-d1b0-44e6-805d-ee7132539a83"
+                },
+                {
+                  "key": "stockAdult",
+                  "value": "25",
+                  "type": "text",
+                  "uuid": "080ee276-a1a0-49d5-b17a-1d678a117c71"
+                },
+                {
+                  "key": "stockChildren",
+                  "value": "12",
+                  "type": "text",
+                  "uuid": "ce285bba-6622-4c67-8981-5f6b3057d33b"
+                },
+                {
+                  "key": "stockBaby",
+                  "value": "5",
+                  "type": "text",
+                  "uuid": "c85a8aa0-eaa8-4847-a99b-b12cc27f96bd"
+                },
+                {
+                  "key": "locations",
+                  "value": "[]",
+                  "type": "text",
+                  "uuid": "4441e721-d313-46d1-8966-6a4e11e96589"
+                },
+                {
+                  "key": "time",
+                  "value": "3N2Đ",
+                  "type": "text",
+                  "uuid": "ae325e2b-9908-4e22-8a63-473dbc12a916"
+                },
+                {
+                  "key": "vehicle",
+                  "value": "Xe khách",
+                  "type": "text",
+                  "uuid": "bf638c3d-8eea-442e-9a0a-69a70af25415"
+                },
+                {
+                  "key": "departureDate",
+                  "value": "2026-09-28",
+                  "type": "text",
+                  "uuid": "0de06818-83a0-4967-8b04-b5fbe2709885"
+                },
+                {
+                  "key": "information",
+                  "value": "Tour updated via API testing",
+                  "type": "text",
+                  "uuid": "2de54f36-2f66-4857-b1c5-7ef55d961036"
+                },
+                {
+                  "key": "schedules",
+                  "value": "[]",
+                  "type": "text",
+                  "uuid": "367cd771-0da9-4fd8-bc51-01807860125b"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/tour/edit/invalid-id",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "tour",
+                "edit",
+                "invalid-id"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Edit Tour - Non-existing ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// {{base_url}}/admin/tour/edit/6a8bc6b7a690eeacfed0c880 sửa lại đuôi ...800 (tour không tônf tại)-> API-BUG-007\r",
+                  "\r",
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response code is error\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.code).to.eql(\"error\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "name",
+                  "value": "API Test Tour 001 - Updated",
+                  "type": "text",
+                  "uuid": "7b21f5c4-0b99-4486-9f07-e06bfc1b2b38"
+                },
+                {
+                  "key": "category",
+                  "value": "",
+                  "type": "text",
+                  "uuid": "59534ba0-e9d4-49cc-bd64-886de55cf795"
+                },
+                {
+                  "key": "position",
+                  "value": "",
+                  "type": "text",
+                  "uuid": "541ef19e-4188-4bf4-93ef-6fce3a855096"
+                },
+                {
+                  "key": "status",
+                  "value": "active",
+                  "type": "text",
+                  "uuid": "29ef6bd0-951f-4171-a822-f15d9f0c97c2"
+                },
+                {
+                  "key": "priceAdult",
+                  "value": "1200000",
+                  "type": "text",
+                  "uuid": "9038d973-3209-4aec-9917-de989531ec25"
+                },
+                {
+                  "key": "priceChildren",
+                  "value": "600000",
+                  "type": "text",
+                  "uuid": "136e544b-737f-4c79-b9a2-23826aee1621"
+                },
+                {
+                  "key": "priceBaby",
+                  "value": "0",
+                  "type": "text",
+                  "uuid": "c3258cff-2814-41d0-b07f-587a9535161d"
+                },
+                {
+                  "key": "priceNewAdult",
+                  "value": "1000000",
+                  "type": "text",
+                  "uuid": "6485c132-d5d6-49db-8928-be6bce5af280"
+                },
+                {
+                  "key": "priceNewChildren",
+                  "value": "500000",
+                  "type": "text",
+                  "uuid": "f1cfb4e0-1033-473d-a189-2206afcb8910"
+                },
+                {
+                  "key": "priceNewBaby",
+                  "value": "0",
+                  "type": "text",
+                  "uuid": "25489a38-d1b0-44e6-805d-ee7132539a83"
+                },
+                {
+                  "key": "stockAdult",
+                  "value": "25",
+                  "type": "text",
+                  "uuid": "080ee276-a1a0-49d5-b17a-1d678a117c71"
+                },
+                {
+                  "key": "stockChildren",
+                  "value": "12",
+                  "type": "text",
+                  "uuid": "ce285bba-6622-4c67-8981-5f6b3057d33b"
+                },
+                {
+                  "key": "stockBaby",
+                  "value": "5",
+                  "type": "text",
+                  "uuid": "c85a8aa0-eaa8-4847-a99b-b12cc27f96bd"
+                },
+                {
+                  "key": "locations",
+                  "value": "[]",
+                  "type": "text",
+                  "uuid": "4441e721-d313-46d1-8966-6a4e11e96589"
+                },
+                {
+                  "key": "time",
+                  "value": "3N2Đ",
+                  "type": "text",
+                  "uuid": "ae325e2b-9908-4e22-8a63-473dbc12a916"
+                },
+                {
+                  "key": "vehicle",
+                  "value": "Xe khách",
+                  "type": "text",
+                  "uuid": "bf638c3d-8eea-442e-9a0a-69a70af25415"
+                },
+                {
+                  "key": "departureDate",
+                  "value": "2026-09-28",
+                  "type": "text",
+                  "uuid": "0de06818-83a0-4967-8b04-b5fbe2709885"
+                },
+                {
+                  "key": "information",
+                  "value": "Tour updated via API testing",
+                  "type": "text",
+                  "uuid": "2de54f36-2f66-4857-b1c5-7ef55d961036"
+                },
+                {
+                  "key": "schedules",
+                  "value": "[]",
+                  "type": "text",
+                  "uuid": "367cd771-0da9-4fd8-bc51-01807860125b"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/tour/edit/6a8bc6b7a690eeacfed0c800",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "tour",
+                "edit",
+                "6a8bc6b7a690eeacfed0c800"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Tour - Valid ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response code is success\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.code).to.eql(\"success\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/admin/tour/delete/6a8bc6b7a690eeacfed0c880",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "tour",
+                "delete",
+                "6a8bc6b7a690eeacfed0c880"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Restore Tour - Valid ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response code is success\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.code).to.eql(\"success\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/admin/tour/undo/6a8bc6b7a690eeacfed0c880",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "tour",
+                "undo",
+                "6a8bc6b7a690eeacfed0c880"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Permanently Delete Tour - Valid ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Chạy lại DELETE TOUR - VALID ID để bật deleted: true trong DB\r",
+                  "\r",
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response code is success\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.code).to.eql(\"success\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/admin/tour/delete-destroy/6a8bc6b7a690eeacfed0c880",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "tour",
+                "delete-destroy",
+                "6a8bc6b7a690eeacfed0c880"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "05 - Admin Account Management",
+      "item": [
+        {
+          "name": "Create Admin - Valid Data",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response code is success\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.code).to.eql(\"success\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "fullName",
+                  "value": "API Test Admin 001",
+                  "type": "text",
+                  "uuid": "fa2fdbb4-b162-45e9-a444-4de1c4ea4fe0"
+                },
+                {
+                  "key": "email",
+                  "value": "apitestadmin001@gmail.com",
+                  "type": "text",
+                  "uuid": "16ed9038-971a-4753-bc2e-e85e1899ba23"
+                },
+                {
+                  "key": "phone",
+                  "value": "0901234567",
+                  "type": "text",
+                  "uuid": "94f64727-2daf-4ebc-b007-76040b7333ae"
+                },
+                {
+                  "key": "positionCompany",
+                  "value": "QA Tester",
+                  "type": "text",
+                  "uuid": "d482b560-9d28-40f3-8f4a-e5ffc15b396b"
+                },
+                {
+                  "key": "status",
+                  "value": "active",
+                  "type": "text",
+                  "uuid": "5d0bf80e-4f48-4dd3-9c7f-04d90892ab69"
+                },
+                {
+                  "key": "password",
+                  "value": "{{test_account_password}}",
+                  "type": "text",
+                  "uuid": "253366d5-85e5-48fe-bd5f-18ecb235f721"
+                },
+                {
+                  "key": "role",
+                  "value": "",
+                  "type": "text",
+                  "uuid": "fb407286-1c1e-4d62-95a6-9b38bc9a322e"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/setting/account-admin/create",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "setting",
+                "account-admin",
+                "create"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Admin - Duplicate Email",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response code is error\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.code).to.eql(\"error\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Duplicate email message is returned\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.message).to.eql(\"Email đã tồn tại trong hệ thống!\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "fullName",
+                  "value": "API Test Admin 001",
+                  "type": "text",
+                  "uuid": "fa2fdbb4-b162-45e9-a444-4de1c4ea4fe0"
+                },
+                {
+                  "key": "email",
+                  "value": "apitestadmin001@gmail.com",
+                  "type": "text",
+                  "uuid": "16ed9038-971a-4753-bc2e-e85e1899ba23"
+                },
+                {
+                  "key": "phone",
+                  "value": "0901234567",
+                  "type": "text",
+                  "uuid": "94f64727-2daf-4ebc-b007-76040b7333ae"
+                },
+                {
+                  "key": "positionCompany",
+                  "value": "QA Tester",
+                  "type": "text",
+                  "uuid": "d482b560-9d28-40f3-8f4a-e5ffc15b396b"
+                },
+                {
+                  "key": "status",
+                  "value": "active",
+                  "type": "text",
+                  "uuid": "5d0bf80e-4f48-4dd3-9c7f-04d90892ab69"
+                },
+                {
+                  "key": "password",
+                  "value": "{{test_account_password}}",
+                  "type": "text",
+                  "uuid": "253366d5-85e5-48fe-bd5f-18ecb235f721"
+                },
+                {
+                  "key": "role",
+                  "value": "",
+                  "type": "text",
+                  "uuid": "fb407286-1c1e-4d62-95a6-9b38bc9a322e"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/setting/account-admin/create",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "setting",
+                "account-admin",
+                "create"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Admin - Empty Full Name",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response code is error\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.code).to.eql(\"error\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Required full name validation message is returned\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.message).to.exist;\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "fullName",
+                  "value": "",
+                  "type": "text",
+                  "uuid": "fa2fdbb4-b162-45e9-a444-4de1c4ea4fe0"
+                },
+                {
+                  "key": "email",
+                  "value": "apitestadmin012@gmail.com",
+                  "type": "text",
+                  "uuid": "16ed9038-971a-4753-bc2e-e85e1899ba23"
+                },
+                {
+                  "key": "phone",
+                  "value": "0901234567",
+                  "type": "text",
+                  "uuid": "94f64727-2daf-4ebc-b007-76040b7333ae"
+                },
+                {
+                  "key": "positionCompany",
+                  "value": "QA Tester",
+                  "type": "text",
+                  "uuid": "d482b560-9d28-40f3-8f4a-e5ffc15b396b"
+                },
+                {
+                  "key": "status",
+                  "value": "active",
+                  "type": "text",
+                  "uuid": "5d0bf80e-4f48-4dd3-9c7f-04d90892ab69"
+                },
+                {
+                  "key": "password",
+                  "value": "{{test_account_password}}",
+                  "type": "text",
+                  "uuid": "253366d5-85e5-48fe-bd5f-18ecb235f721"
+                },
+                {
+                  "key": "role",
+                  "value": "",
+                  "type": "text",
+                  "uuid": "fb407286-1c1e-4d62-95a6-9b38bc9a322e"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/setting/account-admin/create",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "setting",
+                "account-admin",
+                "create"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Admin - Invalid Email Format",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response code is error\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.code).to.eql(\"error\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Invalid email validation message is returned\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.message).to.exist;\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "fullName",
+                  "value": "API Test Admin 004",
+                  "type": "text",
+                  "uuid": "fa2fdbb4-b162-45e9-a444-4de1c4ea4fe0"
+                },
+                {
+                  "key": "email",
+                  "value": "apitestadmin004gmail.com",
+                  "type": "text",
+                  "uuid": "16ed9038-971a-4753-bc2e-e85e1899ba23"
+                },
+                {
+                  "key": "phone",
+                  "value": "0901234567",
+                  "type": "text",
+                  "uuid": "94f64727-2daf-4ebc-b007-76040b7333ae"
+                },
+                {
+                  "key": "positionCompany",
+                  "value": "QA Tester",
+                  "type": "text",
+                  "uuid": "d482b560-9d28-40f3-8f4a-e5ffc15b396b"
+                },
+                {
+                  "key": "status",
+                  "value": "active",
+                  "type": "text",
+                  "uuid": "5d0bf80e-4f48-4dd3-9c7f-04d90892ab69"
+                },
+                {
+                  "key": "password",
+                  "value": "{{test_account_password}}",
+                  "type": "text",
+                  "uuid": "253366d5-85e5-48fe-bd5f-18ecb235f721"
+                },
+                {
+                  "key": "role",
+                  "value": "",
+                  "type": "text",
+                  "uuid": "fb407286-1c1e-4d62-95a6-9b38bc9a322e"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/setting/account-admin/create",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "setting",
+                "account-admin",
+                "create"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Edit Admin - Valid Data",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response code is success\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.code).to.eql(\"success\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "fullName",
+                  "value": "API Test Admin 001 - Updated",
+                  "type": "text",
+                  "uuid": "fa2fdbb4-b162-45e9-a444-4de1c4ea4fe0"
+                },
+                {
+                  "key": "email",
+                  "value": "apitestadmin001@gmail.com",
+                  "type": "text",
+                  "uuid": "16ed9038-971a-4753-bc2e-e85e1899ba23"
+                },
+                {
+                  "key": "phone",
+                  "value": "0987654321",
+                  "type": "text",
+                  "uuid": "94f64727-2daf-4ebc-b007-76040b7333ae"
+                },
+                {
+                  "key": "positionCompany",
+                  "value": "Senior QA Tester",
+                  "type": "text",
+                  "uuid": "d482b560-9d28-40f3-8f4a-e5ffc15b396b"
+                },
+                {
+                  "key": "status",
+                  "value": "active",
+                  "type": "text",
+                  "uuid": "5d0bf80e-4f48-4dd3-9c7f-04d90892ab69"
+                },
+                {
+                  "key": "password",
+                  "value": "",
+                  "type": "text",
+                  "uuid": "253366d5-85e5-48fe-bd5f-18ecb235f721",
+                  "description": "vì controller chỉ hash và đổi password khi req.body.password có giá trị; nếu rỗng thì password cũ được giữ nguyên"
+                },
+                {
+                  "key": "role",
+                  "value": "",
+                  "type": "text",
+                  "uuid": "fb407286-1c1e-4d62-95a6-9b38bc9a322e"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/setting/account-admin/edit/6a8bee92a690eeacfed0c8d5",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "setting",
+                "account-admin",
+                "edit",
+                "6a8bee92a690eeacfed0c8d5"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Deactivate Admin Account",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response code is success\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.code).to.eql(\"success\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "fullName",
+                  "value": "API Test Admin 001 - Updated",
+                  "type": "text",
+                  "uuid": "fa2fdbb4-b162-45e9-a444-4de1c4ea4fe0"
+                },
+                {
+                  "key": "email",
+                  "value": "apitestadmin001@gmail.com",
+                  "type": "text",
+                  "uuid": "16ed9038-971a-4753-bc2e-e85e1899ba23"
+                },
+                {
+                  "key": "phone",
+                  "value": "0987654321",
+                  "type": "text",
+                  "uuid": "94f64727-2daf-4ebc-b007-76040b7333ae"
+                },
+                {
+                  "key": "positionCompany",
+                  "value": "Senior QA Tester",
+                  "type": "text",
+                  "uuid": "d482b560-9d28-40f3-8f4a-e5ffc15b396b"
+                },
+                {
+                  "key": "status",
+                  "value": "inactive",
+                  "type": "text",
+                  "uuid": "5d0bf80e-4f48-4dd3-9c7f-04d90892ab69"
+                },
+                {
+                  "key": "password",
+                  "value": "",
+                  "type": "text",
+                  "uuid": "253366d5-85e5-48fe-bd5f-18ecb235f721",
+                  "description": "vì controller chỉ hash và đổi password khi req.body.password có giá trị; nếu rỗng thì password cũ được giữ nguyên"
+                },
+                {
+                  "key": "role",
+                  "value": "",
+                  "type": "text",
+                  "uuid": "fb407286-1c1e-4d62-95a6-9b38bc9a322e"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/setting/account-admin/edit/6a8bee92a690eeacfed0c8d5",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "setting",
+                "account-admin",
+                "edit",
+                "6a8bee92a690eeacfed0c8d5"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Activate Admin Account",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response code is success\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.code).to.eql(\"success\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "fullName",
+                  "value": "API Test Admin 001 - Updated",
+                  "type": "text",
+                  "uuid": "fa2fdbb4-b162-45e9-a444-4de1c4ea4fe0"
+                },
+                {
+                  "key": "email",
+                  "value": "apitestadmin001@gmail.com",
+                  "type": "text",
+                  "uuid": "16ed9038-971a-4753-bc2e-e85e1899ba23"
+                },
+                {
+                  "key": "phone",
+                  "value": "0987654321",
+                  "type": "text",
+                  "uuid": "94f64727-2daf-4ebc-b007-76040b7333ae"
+                },
+                {
+                  "key": "positionCompany",
+                  "value": "Senior QA Tester",
+                  "type": "text",
+                  "uuid": "d482b560-9d28-40f3-8f4a-e5ffc15b396b"
+                },
+                {
+                  "key": "status",
+                  "value": "active",
+                  "type": "text",
+                  "uuid": "5d0bf80e-4f48-4dd3-9c7f-04d90892ab69"
+                },
+                {
+                  "key": "password",
+                  "value": "",
+                  "type": "text",
+                  "uuid": "253366d5-85e5-48fe-bd5f-18ecb235f721",
+                  "description": "vì controller chỉ hash và đổi password khi req.body.password có giá trị; nếu rỗng thì password cũ được giữ nguyên"
+                },
+                {
+                  "key": "role",
+                  "value": "",
+                  "type": "text",
+                  "uuid": "fb407286-1c1e-4d62-95a6-9b38bc9a322e"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/setting/account-admin/edit/6a8bee92a690eeacfed0c8d5",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "setting",
+                "account-admin",
+                "edit",
+                "6a8bee92a690eeacfed0c8d5"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Assign Role to Admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response code is success\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.code).to.eql(\"success\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "fullName",
+                  "value": "API Test Admin 001 - Updated",
+                  "type": "text",
+                  "uuid": "fa2fdbb4-b162-45e9-a444-4de1c4ea4fe0"
+                },
+                {
+                  "key": "email",
+                  "value": "apitestadmin001@gmail.com",
+                  "type": "text",
+                  "uuid": "16ed9038-971a-4753-bc2e-e85e1899ba23"
+                },
+                {
+                  "key": "phone",
+                  "value": "0987654321",
+                  "type": "text",
+                  "uuid": "94f64727-2daf-4ebc-b007-76040b7333ae"
+                },
+                {
+                  "key": "positionCompany",
+                  "value": "Senior QA Tester",
+                  "type": "text",
+                  "uuid": "d482b560-9d28-40f3-8f4a-e5ffc15b396b"
+                },
+                {
+                  "key": "status",
+                  "value": "active",
+                  "type": "text",
+                  "uuid": "5d0bf80e-4f48-4dd3-9c7f-04d90892ab69"
+                },
+                {
+                  "key": "password",
+                  "value": "{{test_account_password}}",
+                  "type": "text",
+                  "uuid": "253366d5-85e5-48fe-bd5f-18ecb235f721",
+                  "description": "vì controller chỉ hash và đổi password khi req.body.password có giá trị; nếu rỗng thì password cũ được giữ nguyên"
+                },
+                {
+                  "key": "role",
+                  "value": "6815d57a10108880bd8ba6cc",
+                  "type": "text",
+                  "uuid": "fb407286-1c1e-4d62-95a6-9b38bc9a322e"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/setting/account-admin/edit/6a8bee92a690eeacfed0c8d5",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "setting",
+                "account-admin",
+                "edit",
+                "6a8bee92a690eeacfed0c8d5"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Access Allowed With Assigned Role",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Assigned role allows tour creation\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.code).to.eql(\"success\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "name",
+                  "value": "API Test Tour 009",
+                  "type": "text",
+                  "uuid": "7b21f5c4-0b99-4486-9f07-e06bfc1b2b38"
+                },
+                {
+                  "key": "category",
+                  "value": "",
+                  "type": "text",
+                  "uuid": "59534ba0-e9d4-49cc-bd64-886de55cf795"
+                },
+                {
+                  "key": "position",
+                  "value": "",
+                  "type": "text",
+                  "uuid": "541ef19e-4188-4bf4-93ef-6fce3a855096"
+                },
+                {
+                  "key": "status",
+                  "value": "active",
+                  "type": "text",
+                  "uuid": "29ef6bd0-951f-4171-a822-f15d9f0c97c2"
+                },
+                {
+                  "key": "priceAdult",
+                  "value": "1000000",
+                  "type": "text",
+                  "uuid": "9038d973-3209-4aec-9917-de989531ec25"
+                },
+                {
+                  "key": "priceChildren",
+                  "value": "500000",
+                  "type": "text",
+                  "uuid": "136e544b-737f-4c79-b9a2-23826aee1621"
+                },
+                {
+                  "key": "priceBaby",
+                  "value": "0",
+                  "type": "text",
+                  "uuid": "c3258cff-2814-41d0-b07f-587a9535161d"
+                },
+                {
+                  "key": "priceNewAdult",
+                  "value": "900000",
+                  "type": "text",
+                  "uuid": "6485c132-d5d6-49db-8928-be6bce5af280"
+                },
+                {
+                  "key": "priceNewChildren",
+                  "value": "450000",
+                  "type": "text",
+                  "uuid": "f1cfb4e0-1033-473d-a189-2206afcb8910"
+                },
+                {
+                  "key": "priceNewBaby",
+                  "value": "0",
+                  "type": "text",
+                  "uuid": "25489a38-d1b0-44e6-805d-ee7132539a83"
+                },
+                {
+                  "key": "stockAdult",
+                  "value": "20",
+                  "type": "text",
+                  "uuid": "080ee276-a1a0-49d5-b17a-1d678a117c71"
+                },
+                {
+                  "key": "stockChildren",
+                  "value": "10",
+                  "type": "text",
+                  "uuid": "ce285bba-6622-4c67-8981-5f6b3057d33b"
+                },
+                {
+                  "key": "stockBaby",
+                  "value": "5",
+                  "type": "text",
+                  "uuid": "c85a8aa0-eaa8-4847-a99b-b12cc27f96bd"
+                },
+                {
+                  "key": "locations",
+                  "value": "[]",
+                  "type": "text",
+                  "uuid": "4441e721-d313-46d1-8966-6a4e11e96589"
+                },
+                {
+                  "key": "time",
+                  "value": "2N1Đ",
+                  "type": "text",
+                  "uuid": "ae325e2b-9908-4e22-8a63-473dbc12a916"
+                },
+                {
+                  "key": "vehicle",
+                  "value": "Xe khách",
+                  "type": "text",
+                  "uuid": "bf638c3d-8eea-442e-9a0a-69a70af25415"
+                },
+                {
+                  "key": "departureDate",
+                  "value": "2026-09-15",
+                  "type": "text",
+                  "uuid": "0de06818-83a0-4967-8b04-b5fbe2709885"
+                },
+                {
+                  "key": "information",
+                  "value": "Tour created for API testing",
+                  "type": "text",
+                  "uuid": "2de54f36-2f66-4857-b1c5-7ef55d961036"
+                },
+                {
+                  "key": "schedules",
+                  "value": "[]",
+                  "type": "text",
+                  "uuid": "367cd771-0da9-4fd8-bc51-01807860125b"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/tour/create",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "tour",
+                "create"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Access Denied Without Permission",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response code is error\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.code).to.eql(\"error\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Permission denied message is returned\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.message).to.eql(\"Không có quyền sử dụng tính năng này!\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "name",
+                  "value": "API Test Tour 010",
+                  "type": "text",
+                  "uuid": "7b21f5c4-0b99-4486-9f07-e06bfc1b2b38"
+                },
+                {
+                  "key": "category",
+                  "value": "",
+                  "type": "text",
+                  "uuid": "59534ba0-e9d4-49cc-bd64-886de55cf795"
+                },
+                {
+                  "key": "position",
+                  "value": "",
+                  "type": "text",
+                  "uuid": "541ef19e-4188-4bf4-93ef-6fce3a855096"
+                },
+                {
+                  "key": "status",
+                  "value": "active",
+                  "type": "text",
+                  "uuid": "29ef6bd0-951f-4171-a822-f15d9f0c97c2"
+                },
+                {
+                  "key": "priceAdult",
+                  "value": "1000000",
+                  "type": "text",
+                  "uuid": "9038d973-3209-4aec-9917-de989531ec25"
+                },
+                {
+                  "key": "priceChildren",
+                  "value": "500000",
+                  "type": "text",
+                  "uuid": "136e544b-737f-4c79-b9a2-23826aee1621"
+                },
+                {
+                  "key": "priceBaby",
+                  "value": "0",
+                  "type": "text",
+                  "uuid": "c3258cff-2814-41d0-b07f-587a9535161d"
+                },
+                {
+                  "key": "priceNewAdult",
+                  "value": "900000",
+                  "type": "text",
+                  "uuid": "6485c132-d5d6-49db-8928-be6bce5af280"
+                },
+                {
+                  "key": "priceNewChildren",
+                  "value": "450000",
+                  "type": "text",
+                  "uuid": "f1cfb4e0-1033-473d-a189-2206afcb8910"
+                },
+                {
+                  "key": "priceNewBaby",
+                  "value": "0",
+                  "type": "text",
+                  "uuid": "25489a38-d1b0-44e6-805d-ee7132539a83"
+                },
+                {
+                  "key": "stockAdult",
+                  "value": "20",
+                  "type": "text",
+                  "uuid": "080ee276-a1a0-49d5-b17a-1d678a117c71"
+                },
+                {
+                  "key": "stockChildren",
+                  "value": "10",
+                  "type": "text",
+                  "uuid": "ce285bba-6622-4c67-8981-5f6b3057d33b"
+                },
+                {
+                  "key": "stockBaby",
+                  "value": "5",
+                  "type": "text",
+                  "uuid": "c85a8aa0-eaa8-4847-a99b-b12cc27f96bd"
+                },
+                {
+                  "key": "locations",
+                  "value": "[]",
+                  "type": "text",
+                  "uuid": "4441e721-d313-46d1-8966-6a4e11e96589"
+                },
+                {
+                  "key": "time",
+                  "value": "2N1Đ",
+                  "type": "text",
+                  "uuid": "ae325e2b-9908-4e22-8a63-473dbc12a916"
+                },
+                {
+                  "key": "vehicle",
+                  "value": "Xe khách",
+                  "type": "text",
+                  "uuid": "bf638c3d-8eea-442e-9a0a-69a70af25415"
+                },
+                {
+                  "key": "departureDate",
+                  "value": "2026-09-15",
+                  "type": "text",
+                  "uuid": "0de06818-83a0-4967-8b04-b5fbe2709885"
+                },
+                {
+                  "key": "information",
+                  "value": "Tour created for API testing",
+                  "type": "text",
+                  "uuid": "2de54f36-2f66-4857-b1c5-7ef55d961036"
+                },
+                {
+                  "key": "schedules",
+                  "value": "[]",
+                  "type": "text",
+                  "uuid": "367cd771-0da9-4fd8-bc51-01807860125b"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/tour/create",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "tour",
+                "create"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
