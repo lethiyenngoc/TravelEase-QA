@@ -354,6 +354,7 @@ TravelEase-QA/
 |   |-- allure-regression-report.png
 |   |-- bug-001-search-suggestion.png
 |   |-- bug-002-rbac-access.png
+|   |-- jira-defect-tracking.png
 |   |
 |   |-- postman/
 |   |   |-- TravelEase_API_Testing.postman_collection.json
