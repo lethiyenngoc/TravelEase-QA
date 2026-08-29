@@ -97,6 +97,20 @@ Detailed reproduction steps, expected results, actual results, status, and evide
 
 ---
 
+### Jira Defect Tracking
+
+Confirmed web defects were also tracked using **Jira** as part of the defect management workflow.
+
+| Jira Issue | Defect Reference | Description |
+|---|---|---|
+| KAN-1 | WEB-BUG-001 | Search Suggestion defect |
+| KAN-2 | WEB-BUG-002 | Destination Filter defect |
+| KAN-3 | WEB-BUG-003 | RBAC direct URL access defect |
+
+![Jira Defect Tracking](docs/jira-defect-tracking.png)
+
+---
+
 ## API Testing
 
 API testing was performed using **Postman** across the same major TravelEase modules.
